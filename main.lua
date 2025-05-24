@@ -6,6 +6,7 @@ render   = require ("lib/render")
 game_log = require ("lib/game-log")
 log_x    = 30
 log_y    = 600
+debug    = true
 
 function love.load()
   love.window.setTitle("Look at me, I'm a game!")
@@ -14,6 +15,8 @@ function love.load()
   background = love.graphics.newImage('assets/main-bg.png')
 
   scene = scenes["scene_one"]
+
+  game_log.add_message("Welcome to the unnamed fantasy world!")
 end
 
 function love.keypressed(key)
@@ -28,12 +31,14 @@ function love.keypressed(key)
     new_x = new_x + 1
   end
 
-  game_log.add_message("You moved "..key)
-
   if utils.is_walkable(new_x, new_y) then
     player.x = new_x
     player.y = new_y
     utils.handle_tile_interaction(new_x, new_y)
+  end
+
+  if debug then
+    game_log.add_message("Debug: pressed key:" .. key)
   end
 end
 
