@@ -9,7 +9,7 @@ end
 function monster_manager.get_monsters_in_scene()
   local result = {}
   for _, monster in ipairs(monsters) do
-    if monster.location == scenes[scene] then
+    if monster.location == scenes[scene].label then
       table.insert(result, monster)
     end
   end
