@@ -1,6 +1,7 @@
 font     = love.graphics.newFont("assets/upheavtt.ttf", 20)
 
 items    = require("lib/tables/items")
+monsters = require("lib/tables/monsters")
 scenes   = require("lib/tables/scenes")
 player   = require("lib/tables/player")
 log      = require ("lib/game-log")
@@ -9,6 +10,7 @@ tab_manager       = require("lib/tab-manager")
 player_manager    = require("lib/player-manager")
 scene_manager     = require("lib/scene-manager")
 inventory_manager = require("lib/inventory-manager")
+monster_manager   = require("lib/monster-manager")
 
 function love.load()
   love.window.setTitle("Look at me, I'm a game!")
@@ -16,7 +18,7 @@ function love.load()
 
   background = love.graphics.newImage('assets/main-bg.png')
 
-  scene = scenes["scene_one"]
+  scene = scenes[1]
   log.add_message("Welcome to the unnamed fantasy world! Use arrow keys to move.")
 end
 
@@ -40,6 +42,12 @@ function love.keypressed(key)
     player.x = new_x
     player.y = new_y
     scene_manager.handle_tile_interaction(new_x, new_y)
+
+    scene_monsters = monster_manager.get_monsters_in_scene(scene)
+    print(#scene_monsters)
+    if #scene_monsters > 0 then
+      monster_manager.move_monsters_toward_player(scene_monsters)
+    end
   end
 end
 

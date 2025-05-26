@@ -9,9 +9,11 @@ function scene_manager.draw_scene()
       love.graphics.draw(sprite, (x-1)*32, (y-1)*32)
 
       if tile.item then
-        item = items[tile.item]
-        love.graphics.setColor(1, 1, 1)
-        love.graphics.draw(item.sprite, (x-1)*32, (y-1)*32)
+        inventory_manager.draw_item_at(tile, x, y)
+      end
+
+      if tile.monster then
+        monster_manager.draw_monster_at(tile, x, y)
       end
     end
   end

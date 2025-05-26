@@ -1,5 +1,10 @@
 local inventory_manager = {}
 
+function inventory_manager.draw_item_at(tile, x, y)
+  item = items[tile.item]
+  love.graphics.draw(item.sprite, (x-1)*32, (y-1)*32)
+end
+
 function inventory_manager.collect_item(tile)
   item = items[tile.item]
   item.location = "inventory"
