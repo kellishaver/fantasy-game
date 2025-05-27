@@ -1,6 +1,7 @@
 local scenes = {
 
   [1] = {
+    id = 1,
     name = "Scene One",
     label = "scene_one",
     width = 16,
@@ -35,6 +36,7 @@ local scenes = {
   },
 
   [2] = {
+    id = 2,
     name = "Scene Two",
     label = "scene_two",
     width = 16,

@@ -43,8 +43,7 @@ function love.keypressed(key)
     player.y = new_y
     scene_manager.handle_tile_interaction(new_x, new_y)
 
-    scene_monsters = monster_manager.get_monsters_in_scene(scene)
-    print(#scene_monsters)
+    scene_monsters = monster_manager.get_monsters_in_scene(new_x, new_y)
     if #scene_monsters > 0 then
       monster_manager.move_monsters_toward_player(scene_monsters)
     end

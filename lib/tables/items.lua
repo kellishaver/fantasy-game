@@ -1,5 +1,6 @@
 local items = {
   [1] = {
+    id = 1,
     name = "Copper Key",
     location = "scene_two",
     sprite = love.graphics.newImage('assets/items/copper-key.png'),
@@ -10,6 +11,7 @@ local items = {
     }
   },
   [2] = {
+    id = 2,
     name = "Soggy Sandwich",
     location = nil,
     sprite = love.graphics.newImage('assets/items/sandwich.png'),

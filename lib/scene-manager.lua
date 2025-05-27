@@ -25,7 +25,7 @@ function scene_manager.is_walkable(x, y)
   end
   
   local tile = scene.tiles[y][x]
-  return tile.type == "floor" or tile.type == "door"
+  return (tile.type == "floor" or tile.type == "door") and tile.monster == nil
 end
 
 -- Square has an event.
