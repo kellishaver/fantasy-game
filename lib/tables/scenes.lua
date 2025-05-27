@@ -32,7 +32,8 @@ local scenes = {
         y = 2
       }
     },
-    message = "An open field. It looks safe here."
+    message = "An open field. It looks safe here.",
+    music = 1
   },
 
   [2] = {
@@ -67,7 +68,8 @@ local scenes = {
         y = 10
       }
     },
-    message = "You're nearing the edge of a large forest."
+    message = "You're nearing the edge of a large forest.",
+    music = 1
   }
 }
 return scenes

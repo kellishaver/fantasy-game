@@ -1,9 +1,9 @@
 local tab_manager = {
-  active_tab = "game",
+  active_tab = "inv.",
   tab_count = 4,
   tabs = {
-    {name = "game", x = nil, y = 10, w = 100, h = 30},
     {name = "inv.", x = nil, y = 10, w = 100, h = 30},
+    {name = "combat", x = nil, y = 10, w = 100, h = 30},
     {name = "quests", x = nil, y = 10, w = 100, h = 30},
     {name = "char.", x = nil, y = 10, w = 100, h = 30},
   }
@@ -52,8 +52,8 @@ function tab_manager.click_tab(x, y)
   end
 end
 
-function tab_manager.show_game_tab()
-  love.graphics.print("GAME", font, 554, 66)
+function tab_manager.show_combat_tab()
+  love.graphics.print("COMBAT", font, 554, 66)
 end
 
 function tab_manager.show_inventory_tab()

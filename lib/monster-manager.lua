@@ -34,20 +34,14 @@ function monster_manager.move_monsters_toward_player(scene_monsters)
 end
 
 function monster_manager.move_monster_toward_player(monster)
-  print("=== Moving monster:", monster.name, "ID:", monster.id)
-  
   local curr_x, curr_y = monster_manager.find_monster_position(monster.id)
-  print("Current position:", curr_x, curr_y)
   
   if not curr_x or not curr_y then
-    print("Monster not found on map!")
     return
   end
   
   local dx = player.x - curr_x
   local dy = player.y - curr_y
-  print("Player at:", player.x, player.y)
-  print("Distance:", dx, dy)
   
   local new_x, new_y = curr_x, curr_y
   
@@ -57,16 +51,22 @@ function monster_manager.move_monster_toward_player(monster)
     new_y = curr_y + (dy > 0 and 1 or -1)
   end
   
-  print("Trying to move to:", new_x, new_y)
-  print("Is walkable:", scene_manager.is_walkable(new_x, new_y))
-  
   if scene_manager.is_walkable(new_x, new_y) then
-    print("Moving monster!")
     scene.tiles[curr_y][curr_x].monster = nil
     scene.tiles[new_y][new_x].monster = monster.id
-  else
-    print("Can't move there")
+
+    if monster_manager.check_adjacent(new_x, new_y) then
+      combat_manager.initiate_combat(monster)
+    end
   end
+end
+
+function monster_manager.check_adjacent(monster_x, monster_y)
+  return 
+    (player.x == monster_x-1 and player.y == monster_y) or
+    (player.x == monster_x+1 and player.y == monster_y) or
+    (player.y == monster_y-1 and player.x == monster_x) or
+    (player.y == monster_y+1 and player.x == monster_x)
 end
 
 return monster_manager
