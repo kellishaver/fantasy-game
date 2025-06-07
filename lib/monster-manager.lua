@@ -54,10 +54,10 @@ function monster_manager.move_monster_toward_player(monster)
   if scene_manager.is_walkable(new_x, new_y) then
     scene.tiles[curr_y][curr_x].monster = nil
     scene.tiles[new_y][new_x].monster = monster.id
+  end
 
-    if monster_manager.check_adjacent(new_x, new_y) then
-      combat_manager.initiate_combat(monster)
-    end
+  if monster_manager.check_adjacent(new_x, new_y) then
+    combat_manager.initiate_combat(monster)
   end
 end
 

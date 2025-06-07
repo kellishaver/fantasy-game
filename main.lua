@@ -60,7 +60,11 @@ function love.keypressed(key)
 
     scene_monsters = monster_manager.get_monsters_in_scene(new_x, new_y)
     if #scene_monsters > 0 then
-      monster_manager.move_monsters_toward_player(scene_monsters)
+      if monster_manager.check_adjacent(new_x, new_y) then
+        combat_manager.initiate_combat(monster)
+      else
+        monster_manager.move_monsters_toward_player(scene_monsters)
+      end
     end
   end
 end

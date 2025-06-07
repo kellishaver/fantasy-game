@@ -54,6 +54,7 @@ end
 
 function tab_manager.show_combat_tab()
   love.graphics.print("COMBAT", font, 554, 66)
+  combat_manager.render_combat()
 end
 
 function tab_manager.show_inventory_tab()
