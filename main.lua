@@ -26,45 +26,47 @@ function love.load()
 end
 
 function love.keypressed(key)
-  if (key == "up" or key == "down" or key == "left" or key == "right") and
-    player.in_combat == true then
-      return
-  end
+  if (key == "up" or key == "down" or key == "left" or key == "right") then
 
-  local moved = false
+    if player.in_combat then
+      return false
+    end
 
-  local new_x, new_y = player.x, player.y
-  if key == "up" then
-    new_y = new_y - 1
-    player.facing = "up"
-    moved = true
-  elseif key == "down" then
-    new_y = new_y + 1
-    player.facing = "down"
-    moved = true
-  elseif key == "left" then
-    new_x = new_x - 1
-    player.facing = "left"
-    moved = true
-  elseif key == "right" then
-    new_x = new_x + 1
-    player.facing = "right"
-    moved = true
-  end
+    local moved = false
 
-  if moved and scene_manager.is_walkable(new_x, new_y) then
-    player.x = new_x
-    player.y = new_y
-    
-    scene_manager.handle_tile_interaction(new_x, new_y)
-    
-    local adjacent_monster = player_manager.adjacent_to_monsters()
-    if adjacent_monster then
-      combat_manager.initiate_combat(adjacent_monster)
-    else
-      scene_monsters = monster_manager.get_monsters_in_scene()
-      if #scene_monsters > 0 then
-        monster_manager.move_monsters_toward_player(scene_monsters)
+    local new_x, new_y = player.x, player.y
+    if key == "up" then
+      new_y = new_y - 1
+      player.facing = "up"
+      moved = true
+    elseif key == "down" then
+      new_y = new_y + 1
+      player.facing = "down"
+      moved = true
+    elseif key == "left" then
+      new_x = new_x - 1
+      player.facing = "left"
+      moved = true
+    elseif key == "right" then
+      new_x = new_x + 1
+      player.facing = "right"
+      moved = true
+    end
+
+    if moved and scene_manager.is_walkable(new_x, new_y) then
+      player.x = new_x
+      player.y = new_y
+      
+      scene_manager.handle_tile_interaction(new_x, new_y)
+
+      local adjacent_monster = player_manager.adjacent_to_monster()
+      if adjacent_monster then
+        combat_manager.initiate_combat(adjacent_monster)
+      else
+        scene_monsters = monster_manager.get_monsters_in_scene()
+        if #scene_monsters > 0 then
+          monster_manager.move_monsters_toward_player(scene_monsters)
+        end
       end
     end
   end

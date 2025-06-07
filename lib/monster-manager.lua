@@ -56,21 +56,10 @@ function monster_manager.move_monster_toward_player(monster)
     scene.tiles[new_y][new_x].monster = monster.id
   end
 
-  if monster_manager.adjacent_to_player(new_x, new_y) then
+  if player_manager.adjacent_to_monster() then
     combat_manager.initiate_combat(monster)
   end
-end
 
-function monster_manager.adjacent_to_player(monster_x, monster_y)
-  if player.in_combat then
-    return nil
-  end
-  
-  return 
-    (player.x == monster_x-1 and player.y == monster_y) or
-    (player.x == monster_x+1 and player.y == monster_y) or
-    (player.y == monster_y-1 and player.x == monster_x) or
-    (player.y == monster_y+1 and player.x == monster_x)
 end
 
 return monster_manager
