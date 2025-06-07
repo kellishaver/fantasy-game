@@ -37,7 +37,7 @@ function combat_manager.render_combat()
   local monster = combat_manager.monster
   love.graphics.setColor(1, 1, 1, 1)
   love.graphics.print("- "..monster.name, font, 640, 66)
-  love.graphics.printf(monster.description, 680, 120, 300, "left")
+  love.graphics.printf(monster.description, 700, 120, 300, "left")
   love.graphics.draw(monster.sprite, min_x, min_y, 0, 4, 4)
 
   if combat_manager.turn == "player" then
