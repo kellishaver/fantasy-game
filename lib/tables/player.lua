@@ -8,6 +8,7 @@ local player = {
   defense = 3,
   hp = 15,
   hp_max = 15,
+  xp = 0,
   equipment = {
     weapon = nil,
     shield = nil,

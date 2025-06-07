@@ -26,6 +26,18 @@ function monster_manager.find_monster_position(monster_id)
   return nil, nil
 end
 
+function monster_manager.move_adjacent_monsters()
+  local adjacent_monster = player_manager.adjacent_to_monster()
+  if adjacent_monster then
+    combat_manager.initiate_combat(adjacent_monster)
+  else
+    local scene_monsters = monster_manager.get_monsters_in_scene()
+    if #scene_monsters > 0 then
+      monster_manager.move_monsters_toward_player(scene_monsters)
+    end
+  end
+end
+
 function monster_manager.move_monsters_toward_player(scene_monsters)
   for m = 1, #scene_monsters do
     monster_manager.move_monster_toward_player(scene_monsters[m])
@@ -60,4 +72,4 @@ function monster_manager.move_monster_toward_player(monster)
   end
 end
 
-return monster_manager
+return monster_managers

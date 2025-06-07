@@ -60,4 +60,32 @@ function player_manager.is_adjacent_to(x, y)
     (player.y == y+1 and player.x == x)
 end
 
+function player_manager.move_player(key)
+  if player.in_combat then
+    return false
+  end
+
+  local moved = false
+
+  local new_x, new_y = player.x, player.y
+  if key == "up" then
+    new_y = new_y - 1
+  elseif key == "down" then
+    new_y = new_y + 1
+  elseif key == "left" then
+    new_x = new_x - 1
+  elseif key == "right" then
+    new_x = new_x + 1
+  end
+
+  player.facing = key
+  moved = true
+
+  if moved and scene_manager.is_walkable(new_x, new_y) then
+    player.x = new_x
+    player.y = new_y
+  end
+  return moved
+end
+
 return player_manager

@@ -84,4 +84,28 @@ function combat_manager.render_monster_action()
   love.graphics.print("It's "..combat_manager.monster.name.."'s turn...", font, 554, 240)
 end
 
+function combat_manager.melee_attack(attacker, target)
+  damage = 0
+
+  if player.equipment.weapon == nil then
+    damage = 2
+  else
+    damage = player.equipment.weapon.damage
+  end
+
+  to_hit_percent = 20 + (attacker.melee*5)
+  damage_reduction = target.defense
+
+  math.randomseed(os.time)
+  attack_role = math.random(1, 100)
+
+  if attack_role < to_hit_percent then
+    total_damage = target.hp - (damage-damage_reduction)
+    target.hp = total_damage
+    log.add_message("You hit "..attacker.name.." for "..total_damage.." damage!")
+  else
+    log.add_message("You missed!")
+  end
+end
+
 return combat_manager
