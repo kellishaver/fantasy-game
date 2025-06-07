@@ -1,6 +1,7 @@
 local combat_manager = {
   monster = nil,
-  turn = "player"
+  turn = "player",
+  overlay = nil
 }
 
 function combat_manager.initiate_combat(current_monster)
@@ -84,28 +85,78 @@ function combat_manager.render_monster_action()
   love.graphics.print("It's "..combat_manager.monster.name.."'s turn...", font, 554, 240)
 end
 
+function combat_manager.perform_attack_action(key)
+  if not player.in_combat then
+    return
+  end
+
+  if key == "1" then
+    combat_manager.melee_attack(player,  combat_manager.monster)
+  elseif key == "2" then
+  elseif key == "3" then
+  elseif key == "4" then
+  elseif key == "5" then
+  end
+end
+
 function combat_manager.melee_attack(attacker, target)
   damage = 0
 
   if player.equipment.weapon == nil then
-    damage = 2
+    damage = 1
   else
     damage = player.equipment.weapon.damage
   end
 
-  to_hit_percent = 20 + (attacker.melee*5)
+  to_hit_percent = 30 + (attacker.melee*5)
   damage_reduction = target.defense
 
-  math.randomseed(os.time)
+  math.randomseed(os.time())
   attack_role = math.random(1, 100)
 
-  if attack_role < to_hit_percent then
-    total_damage = target.hp - (damage-damage_reduction)
-    target.hp = total_damage
-    log.add_message("You hit "..attacker.name.." for "..total_damage.." damage!")
+  combat_manager.apply_damage(target, attacker, attack_role, to_hit_percent, damage_reduction)
+
+  if target.hp == 0 then
+    combat_manager.end_combat(target)
   else
-    log.add_message("You missed!")
+    if combat_manager.turn == "playuer" then
+      combat_manager.do_monster_attack()
+    else
+      combat_manager.turn = "player"
+    end
   end
+end
+
+function combat_manager.apply_damage(target, attacker, attack_role, to_hit_percent, damage_reduction)
+  if attack_role <= to_hit_percent then
+    total_damage = damage-damage_reduction
+    target.hp = target.hp - total_damage
+
+    if combat_manager.turn == "player" then
+      log.add_message("You hit "..target.name.." for "..total_damage.." damage!")
+    else
+      log.add_message(attacker.name.." hit you for for "..total_damage.." damage!")
+    end
+  else
+    if combat_manager.turn == "player" then
+      log.add_message("You missed!")
+    else
+      log.add_message(attacier.name" missed you!")
+    end
+  end
+end
+
+function combat_manager.do_monster_attack()
+end
+
+function combat_manager.end_combat()
+  player.in_combat = false
+  combat_manager.turn = "player"
+  sfx_manager.stop_combat_music()
+
+  x, y = monster_manager.find_monster_position(combat_manager.monster.id)
+
+  scene.tiles[y][x].monster = nil
 end
 
 return combat_manager

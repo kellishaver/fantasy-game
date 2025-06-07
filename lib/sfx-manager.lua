@@ -5,7 +5,7 @@ local sfx_manager = {
 
 function sfx_manager.play_scene_music()
     sfx_manager.scene_music = sfx[scene.music]
-    love.audio.setVolume(0.3)
+    love.audio.setVolume(1)
     love.audio.play(sfx_manager.scene_music.source)
 end
 
@@ -23,7 +23,9 @@ function sfx_manager.stop_combat_music()
   csrc:stop()
   csrc:setVolume(0)
 
-  sfx_manager.play_scene_music()
+  ssrc = sfx_manager.scene_music.source
+  ssrc:play()
+  ssrc:setVolume(1)
 end
 
 return sfx_manager

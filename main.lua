@@ -34,7 +34,7 @@ function love.keypressed(key)
       monster_manager.move_adjacent_monsters()
     end
   elseif (key == "1" or key == "2" or key == "3" or key == "4" or key == "5") then
-    -- do combbat stuffs
+    combat_manager.perform_attack_action(key)
   end
 end
 
