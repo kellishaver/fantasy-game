@@ -5,7 +5,6 @@ function monster_manager.draw_monster_at(tile, x, y)
   love.graphics.draw(monster.sprite, (x-1)*32, (y-1)*32)
 end
 
-
 function monster_manager.get_monsters_in_scene(tile_x, tile_y)
   local result = {}
   for _, monster in ipairs(monsters) do
@@ -59,7 +58,6 @@ function monster_manager.move_monster_toward_player(monster)
   if player_manager.adjacent_to_monster() then
     combat_manager.initiate_combat(monster)
   end
-
 end
 
 return monster_manager

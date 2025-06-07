@@ -31,10 +31,26 @@ function combat_manager.set_combat_facing()
 end
 
 function combat_manager.render_combat()
-  min_y = 110
+  min_y = 100
   min_x = 554
 
-  love.graphics.draw(combat_manager.monster.sprite, (x-1)*32, (y-1)*32)
+  local monster = combat_manager.monster
+  love.graphics.setColor(1, 1, 1, 1)
+  love.graphics.print("- "..monster.name, font, 640, 66)
+  love.graphics.printf(monster.description, 680, 120, 300, "left")
+  love.graphics.draw(monster.sprite, min_x, min_y, 0, 4, 4)
+
+  love.graphics.print("It's your turn!", font, 554, 240)
+
+  love.graphics.print("1", font, 564, 280)
+  love.graphics.print("- Attack", font, 584, 280)
+
+  love.graphics.print("2", font, 564, 300)
+  love.graphics.print("- Defend", font, 584, 300)
+
+  love.graphics.print("3", font, 564, 320)
+  love.graphics.print("- Flee", font, 584, 320)
+
 end
 
 return combat_manager

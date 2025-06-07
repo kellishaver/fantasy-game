@@ -1,7 +1,8 @@
 local monsters = {
   [1] = {
     id = 1,
-    name =" Green Blob",
+    name = " Green Blob",
+    description = "\"Blurble, gorp, glurp, glurp!\"\n\nA slimey green blog slurps at you aggressively. It looks... hungry?",
     location = "scene_two",
     sprite = love.graphics.newImage('assets/sprites/green-blob.png'),
     max_hp = 4,

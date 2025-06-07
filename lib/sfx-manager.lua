@@ -1,6 +1,6 @@
 local sfx_manager = {
   combat_music =  sfx[2],
-  scene_music = nil
+  scene_music = sfx[1]
 }
 
 function sfx_manager.play_scene_music()

@@ -18,6 +18,7 @@ combat_manager    = require("lib/combat-manager")
 function love.load()
   love.window.setTitle("Look at me, I'm a game!")
   love.window.setMode(1024, 768)
+  love.graphics.setFont(love.graphics.newFont(16))
 
   background = love.graphics.newImage('assets/main-bg.png')
 
@@ -85,6 +86,19 @@ function love.mousepressed(x, y, button)
 end
 
 function love.update(dt)
+  local src = nil
+
+  if player.in_combat then
+    src = sfx_manager.combat_music.source
+  else
+    src = sfx_manager.scene_music.source
+  end
+
+  if sfx_manager.scene_music or sfx_manager.combat_music then
+    if not src:isPlaying() then
+      love.audio.play(src)
+    end
+  end
 end
 
 function love.draw()
