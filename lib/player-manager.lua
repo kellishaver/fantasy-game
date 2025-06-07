@@ -13,11 +13,8 @@ function player_manager.draw_player_stats()
   love.graphics.print("Melee", font, 30, 470)
   love.graphics.print(player.melee, font, 140, 470)
 
-  love.graphics.print("Ranged", font, 30, 490)
-  love.graphics.print(player.ranged, font, 140, 490)
-
-  love.graphics.print("Magic", font, 30, 510)
-  love.graphics.print(player.magic, font, 140, 510)
+  love.graphics.print("Magic", font, 30, 490)
+  love.graphics.print(player.magic, font, 140, 490)
 
   love.graphics.print("Defense", font, 30, 530)
   love.graphics.print(player.magic, font, 140, 530)

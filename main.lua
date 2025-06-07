@@ -33,7 +33,7 @@ function love.keypressed(key)
       scene_manager.handle_tile_interaction(player.x, player.y)
       monster_manager.move_adjacent_monsters()
     end
-  elseif (key == "1" or key == "2" or key == "3" or key == "4" or key == "5") then
+  elseif (key == "1" or key == "2" or key == "3" or key == "4") then
     combat_manager.perform_attack_action(key)
   end
 end

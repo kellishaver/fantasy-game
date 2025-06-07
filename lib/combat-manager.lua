@@ -32,6 +32,10 @@ function combat_manager.set_combat_facing()
 end
 
 function combat_manager.render_combat()
+  if not player.in_combat then
+    return
+  end
+
   min_y = 100
   min_x = 554
 
@@ -75,7 +79,6 @@ function combat_manager.get_combat_actions()
   return {
     {text = "Attack : " .. weapon_text, enabled = true},
     {text = "Defend", enabled = true},
-    {text = "Cast Spell", enabled = #(player.spells or {}) > 0},
     {text = "Use Item", enabled = #inventory_manager.get_inventory() > 0},
     {text = "Flee", enabled = true}
   }
@@ -95,63 +98,72 @@ function combat_manager.perform_attack_action(key)
   elseif key == "2" then
   elseif key == "3" then
   elseif key == "4" then
-  elseif key == "5" then
   end
 end
 
 function combat_manager.melee_attack(attacker, target)
-  damage = 0
-
-  if player.equipment.weapon == nil then
-    damage = 1
-  else
-    damage = player.equipment.weapon.damage
-  end
-
-  to_hit_percent = 30 + (attacker.melee*5)
-  damage_reduction = target.defense
+  local to_hit_percent = 30 + (attacker.melee*5)
 
   math.randomseed(os.time())
-  attack_role = math.random(1, 100)
+  local attack_role = math.random(1, 100)
 
-  combat_manager.apply_damage(target, attacker, attack_role, to_hit_percent, damage_reduction)
+  if attack_role <= to_hit_percent then
+    combat_manager.apply_damage(target, attacker, attack_role)
+  end
 
   if target.hp == 0 then
     combat_manager.end_combat(target)
+  end
+
+  if combat_manager.turn == "player" then
+    combat_manager.do_monster_attack()
   else
-    if combat_manager.turn == "playuer" then
-      combat_manager.do_monster_attack()
-    else
-      combat_manager.turn = "player"
-    end
+    combat_manager.turn = "player"
   end
 end
 
-function combat_manager.apply_damage(target, attacker, attack_role, to_hit_percent, damage_reduction)
-  if attack_role <= to_hit_percent then
-    total_damage = damage-damage_reduction
-    target.hp = target.hp - total_damage
+function combat_manager.get_mele_damage()
+  local damage = 0
 
-    if combat_manager.turn == "player" then
-      log.add_message("You hit "..target.name.." for "..total_damage.." damage!")
+  if combat_manager.turn == "player" then
+    if player.equipment.weapon == nil then
+      damage = 1
     else
-      log.add_message(attacker.name.." hit you for for "..total_damage.." damage!")
+      damage = player.equipment.weapon.damage
     end
   else
-    if combat_manager.turn == "player" then
-      log.add_message("You missed!")
-    else
-      log.add_message(attacier.name" missed you!")
-    end
+    damage = combat_manager.monster.damage
+  end
+  
+  return damage-target.defense
+end
+
+function combat_manager.apply_damage(target, attacker, attack_role)
+  local total_damage = combat_manager.get_mele_damage()
+
+  target.hp = math.max(0, target.hp - total_damage)
+
+  if combat_manager.turn == "player" then
+    log.add_message("You hit "..target.name.." for "..total_damage.." damage!")
+  else
+    log.add_message(attacker.name.." hit you for for "..total_damage.." damage!")
+  end
+
+  if combat_manager.turn == "player" then
+    log.add_message("You missed!")
+  else
+    log.add_message(attacier.name.." missed you!")
   end
 end
 
 function combat_manager.do_monster_attack()
+  combat_manager.melee_attack(combat_manager.monster, player)
 end
 
 function combat_manager.end_combat()
   player.in_combat = false
   combat_manager.turn = "player"
+  tab_manager.active_tab = "inv."
   sfx_manager.stop_combat_music()
 
   x, y = monster_manager.find_monster_position(combat_manager.monster.id)
