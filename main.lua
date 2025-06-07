@@ -27,7 +27,7 @@ end
 
 function love.keypressed(key)
   if (key == "up" or key == "down" or key == "left" or key == "right") and
-    combat_manager.in_combat == true then
+    player.in_combat == true then
       return
   end
 

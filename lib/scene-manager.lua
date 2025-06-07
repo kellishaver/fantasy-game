@@ -23,9 +23,14 @@ function scene_manager.is_walkable(x, y)
   if x < 1 or x > scene.width or y < 1 or y > scene.height then
     return false
   end
+
+  if player.in_combat then
+    return false
+  end
   
   local tile = scene.tiles[y][x]
-  return (tile.type == "floor" or tile.type == "door") and tile.monster == nil
+  return (tile.type == "floor" or tile.type == "door") and 
+         (tile.monster == nil or player.in_combat)
 end
 
 -- Square has an event.
