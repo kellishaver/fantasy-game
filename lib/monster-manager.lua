@@ -72,4 +72,4 @@ function monster_manager.move_monster_toward_player(monster)
   end
 end
 
-return monster_managers
+return monster_manager
