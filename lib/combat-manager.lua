@@ -17,6 +17,7 @@ combat_manager.initiate_combat            = combat_core.initiate_combat
 combat_manager.do_monster_attack          = combat_core.do_monster_attack
 combat_manager.end_combat                 = combat_core.end_combat
 
+combat_manager.perform_attack_action      = combat_actions.perform_attack_action
 combat_manager.melee_attack               = combat_actions.melee_attack
 
 combat_manager.get_melee_damage           = combat_damage.get_melee_damage
