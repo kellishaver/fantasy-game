@@ -38,6 +38,10 @@ function tab_manager.draw_tab_interface()
 end
 
 function tab_manager.click_tab(x, y)
+  if player.in_combat then
+    return
+  end
+  
   for i = 1, tab_manager.tab_count do
     tab = tab_manager.tabs[i]
     x_min = tab.x

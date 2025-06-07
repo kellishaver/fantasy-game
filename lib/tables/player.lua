@@ -14,9 +14,9 @@ local player = {
     helm = nil,
     armor = nil,
     boots = nil,
-    cape = nil,
-    necklace = nil
+    ring = nil
   },
+  spells = {},
   sprites = {
     up    = love.graphics.newImage('assets/sprites/hero-up.png'),
     left  = love.graphics.newImage('assets/sprites/hero-left.png'),
