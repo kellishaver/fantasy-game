@@ -1,5 +1,4 @@
 local combat_manager = {
-  in_combat = false,
   monster = nil
 }
 
@@ -9,7 +8,7 @@ function combat_manager.initiate_combat(current_monster)
   end
 
   combat_manager.monster = current_monster
-  combat_manager.in_combat = true
+  player.in_combat = true
   sfx_manager.play_combat_music()
   tab_manager.active_tab = "combat"
   log.add_message("It's a "..current_monster.name.."... time to fight!")

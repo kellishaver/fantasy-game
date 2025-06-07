@@ -23,7 +23,8 @@ local player = {
     right = love.graphics.newImage('assets/sprites/hero-right.png'),
     down  = love.graphics.newImage('assets/sprites/hero-down.png')
   },
-  facing = "down"
+  facing = "down",
+  in_combat = false,
 }
 
 return player

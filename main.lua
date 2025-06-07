@@ -55,14 +55,15 @@ function love.keypressed(key)
   if moved and scene_manager.is_walkable(new_x, new_y) then
     player.x = new_x
     player.y = new_y
-
+    
     scene_manager.handle_tile_interaction(new_x, new_y)
-
-    scene_monsters = monster_manager.get_monsters_in_scene(new_x, new_y)
-    if #scene_monsters > 0 then
-      if monster_manager.check_adjacent(new_x, new_y) then
-        combat_manager.initiate_combat(monster)
-      else
+    
+    local adjacent_monster = player_manager.adjacent_to_monsters()
+    if adjacent_monster then
+      combat_manager.initiate_combat(adjacent_monster)
+    else
+      scene_monsters = monster_manager.get_monsters_in_scene()
+      if #scene_monsters > 0 then
         monster_manager.move_monsters_toward_player(scene_monsters)
       end
     end

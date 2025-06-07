@@ -29,4 +29,22 @@ end
 function player_manager.draw_player()
   love.graphics.draw(player.sprites[player.facing], (player.x-1)*32, (player.y-1)*32)
 end
+
+function player_manager.adjacent_to_monsters()
+  if player.in_combat then
+    return nil
+  end
+  
+  local scene_monsters = monster_manager.get_monsters_in_scene()
+
+  for _, monster in ipairs(scene_monsters) do
+    local monster_x, monster_y = monster_manager.find_monster_position(monster.id)
+    if monster_x and monster_y and monster_manager.adjacent_to_player(monster_x, monster_y) then
+      return monster
+    end
+  end
+  
+  return nil
+end
+
 return player_manager
