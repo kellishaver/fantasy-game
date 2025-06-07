@@ -28,4 +28,15 @@ function sfx_manager.stop_combat_music()
   ssrc:setVolume(1)
 end
 
+function sfx_manager.punch()
+  src = sfx[3].source
+  src:play()
+end
+
+function sfx_manager.grunt()
+  src = sfx[4].source
+  src:play()
+end
+
+
 return sfx_manager

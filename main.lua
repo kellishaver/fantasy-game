@@ -64,6 +64,8 @@ function love.update(dt)
       love.audio.play(src)
     end
   end
+
+  combat_manager.update(dt)
 end
 
 function love.draw()
@@ -91,4 +93,5 @@ function love.draw()
     tab_manager.show_character_tab()
   end  
 
+  combat_manager.render_flash_overlay()
 end

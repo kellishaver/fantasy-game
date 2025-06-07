@@ -1,7 +1,11 @@
 local combat_manager = {
   monster = nil,
   turn = "player",
-  overlay = nil
+  overlay = nil,
+  monster_attack_timer = 0,
+  monster_attack_delay = 1.0,
+  flash_timer = 0,
+  flash_duration = 0.3
 }
 
 function combat_manager.initiate_combat(current_monster)
@@ -70,7 +74,7 @@ function combat_manager.render_player_actions_menu()
     love.graphics.print("- " .. action.text, font, 584, y_pos)
   end
   
-  love.graphics.setColor(1, 1, 1, 1) -- Reset color
+  love.graphics.setColor(1, 1, 1, 1)
 end
 
 function combat_manager.get_combat_actions()
@@ -93,7 +97,7 @@ function combat_manager.perform_attack_action(key)
     return
   end
 
-  if key == "1" then
+  if key == "1" and combat_manager.turn == "player" then
     combat_manager.melee_attack(player,  combat_manager.monster)
   elseif key == "2" then
   elseif key == "3" then
@@ -109,20 +113,28 @@ function combat_manager.melee_attack(attacker, target)
 
   if attack_role <= to_hit_percent then
     combat_manager.apply_damage(target, attacker, attack_role)
+  else
+    if combat_manager.turn == "player" then
+      log.add_message("You missed!")
+    else
+      log.add_message(attacker.name.." missed you!")
+    end
   end
 
   if target.hp == 0 then
     combat_manager.end_combat(target)
+    return
   end
 
   if combat_manager.turn == "player" then
+    combat_manager.turn = "monster"
     combat_manager.do_monster_attack()
   else
     combat_manager.turn = "player"
   end
 end
 
-function combat_manager.get_mele_damage()
+function combat_manager.get_melee_damage(target)
   local damage = 0
 
   if combat_manager.turn == "player" then
@@ -135,29 +147,26 @@ function combat_manager.get_mele_damage()
     damage = combat_manager.monster.damage
   end
   
-  return damage-target.defense
+  return math.max(1, damage - target.defense)
 end
 
 function combat_manager.apply_damage(target, attacker, attack_role)
-  local total_damage = combat_manager.get_mele_damage()
+  local total_damage = combat_manager.get_melee_damage(target)
 
   target.hp = math.max(0, target.hp - total_damage)
 
   if combat_manager.turn == "player" then
     log.add_message("You hit "..target.name.." for "..total_damage.." damage!")
+    sfx_manager.punch()
   else
     log.add_message(attacker.name.." hit you for for "..total_damage.." damage!")
-  end
-
-  if combat_manager.turn == "player" then
-    log.add_message("You missed!")
-  else
-    log.add_message(attacier.name.." missed you!")
+    sfx_manager.grunt()
+    combat_manager.flash_timer = combat_manager.flash_duration
   end
 end
 
 function combat_manager.do_monster_attack()
-  combat_manager.melee_attack(combat_manager.monster, player)
+  combat_manager.monster_attack_timer = combat_manager.monster_attack_delay
 end
 
 function combat_manager.end_combat()
@@ -169,6 +178,33 @@ function combat_manager.end_combat()
   x, y = monster_manager.find_monster_position(combat_manager.monster.id)
 
   scene.tiles[y][x].monster = nil
+end
+
+function combat_manager.render_flash_overlay()
+  if combat_manager.flash_timer > 0 then
+    -- Calculate alpha based on remaining time (fade out effect)
+    local alpha = combat_manager.flash_timer / combat_manager.flash_duration
+    love.graphics.setColor(1, 0, 0, alpha * 0.3)  -- Red with fading transparency
+    love.graphics.rectangle("fill", 0, 0, love.graphics.getWidth(), love.graphics.getHeight())
+    love.graphics.setColor(1, 1, 1, 1)  -- Reset color
+  end
+end
+
+function combat_manager.update(dt)
+  if not player.in_combat then
+    return
+  end
+
+  if combat_manager.monster_attack_timer > 0 then
+    combat_manager.monster_attack_timer = combat_manager.monster_attack_timer - dt
+    if combat_manager.monster_attack_timer <= 0 then
+      combat_manager.melee_attack(combat_manager.monster, player)
+    end
+  end
+
+  if combat_manager.flash_timer > 0 then
+    combat_manager.flash_timer = combat_manager.flash_timer - dt
+  end
 end
 
 return combat_manager
