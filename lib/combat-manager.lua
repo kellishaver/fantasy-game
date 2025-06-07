@@ -41,43 +41,47 @@ function combat_manager.render_combat()
   love.graphics.draw(monster.sprite, min_x, min_y, 0, 4, 4)
 
   if combat_manager.turn == "player" then
-    love.graphics.print("It's your turn!", font, 554, 240)
-
-    love.graphics.print("1", font, 564, 280)
-    if player.equipment.weapon == nil then
-      love.graphics.print("- Attack : unarmed", font, 584, 280)
-    else
-      love.graphics.print("- Attack : "..player.equipment.weapon.name, font, 584, 280)
-    end
-
-    love.graphics.print("2", font, 564, 300)
-    love.graphics.print("- Defend", font, 584, 300)
-
-    if table.getn(player.spells) > 0 then
-      love.graphics.print("3", font, 564, 320)
-      love.graphics.print("- Cast Spell", font, 584, 320)
-    else
-      love.graphics.setColor(1, 1, 1, 0.5)
-      love.graphics.print("3", font, 564, 320)
-      love.graphics.print("- Cast Spell", font, 584, 320)
-      love.graphics.setColor(1, 1, 1, 1)
-    end
-
-    if table.getn(inventory_manager.get_inventory()) > 0 then
-      love.graphics.print("4", font, 564, 340)
-      love.graphics.print("- Use Item", font, 584, 340)
-    else
-      love.graphics.setColor(1, 1, 1, 0.5)
-      love.graphics.print("4", font, 564, 340)
-      love.graphics.print("- Use Item", font, 584, 340)
-      love.graphics.setColor(1, 1, 1, 1)
-    end
-
-    love.graphics.print("5", font, 564, 360)
-    love.graphics.print("- Flee", font, 584, 360)
+    combat_manager.render_player_actions_menu()
   else
-    love.graphics.print("It's "..combat_manager.monster.name.."'s turn...", font, 554, 240)
+    combat_manager.render_monster_action()
   end
+end
+
+function combat_manager.render_player_actions_menu()
+  love.graphics.print("It's your turn!", font, 554, 240)
+  
+  local actions = combat_manager.get_combat_actions()
+  
+  for i, action in ipairs(actions) do
+    local y_pos = 260 + (i * 20)
+    
+    if action.enabled then
+      love.graphics.setColor(1, 1, 1, 1)
+    else
+      love.graphics.setColor(1, 1, 1, 0.5)
+    end
+    
+    love.graphics.print(i, font, 564, y_pos)
+    love.graphics.print("- " .. action.text, font, 584, y_pos)
+  end
+  
+  love.graphics.setColor(1, 1, 1, 1) -- Reset color
+end
+
+function combat_manager.get_combat_actions()
+  local weapon_text = player.equipment.weapon and player.equipment.weapon.name or "unarmed"
+  
+  return {
+    {text = "Attack : " .. weapon_text, enabled = true},
+    {text = "Defend", enabled = true},
+    {text = "Cast Spell", enabled = #(player.spells or {}) > 0},
+    {text = "Use Item", enabled = #inventory_manager.get_inventory() > 0},
+    {text = "Flee", enabled = true}
+  }
+end
+
+function combat_manager.render_monster_action()
+  love.graphics.print("It's "..combat_manager.monster.name.."'s turn...", font, 554, 240)
 end
 
 return combat_manager
