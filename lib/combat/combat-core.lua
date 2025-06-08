@@ -22,14 +22,26 @@ function combat_core.end_combat()
   combat_manager.turn = "player"
   tab_manager.active_tab = "inv."
   sfx_manager.stop_combat_music()
+  combat_core.resolution()
+end
 
+function combat_core.resolution()
   if player.hp > 0 and combat_manager.monster.hp == 0 then
-    x, y = monster_manager.find_monster_position(combat_manager.monster.id)
-    scene.tiles[y][x].monster = nil
-    sfx_manager.success()
+    combat_core.player_win()
   elseif player.hp == 0 then
-    sfx_manager.player_death()
+    combat_core.monster_win()
   end
+end
+
+function combat_core.player_win()
+  x, y = monster_manager.find_monster_position(combat_manager.monster.id)
+  scene.tiles[y][x].monster = nil
+  sfx_manager.success()
+  monster_manager.drop_loot(combat_manager.monster, x, y)
+end
+
+function combat_core.monster_win()
+  sfx_manager.player_death()
 end
 
 return combat_core

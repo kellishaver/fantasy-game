@@ -72,4 +72,10 @@ function monster_manager.move_monster_toward_player(monster)
   end
 end
 
+function monster_manager.drop_loot(monster, x, y)
+  if monster.item then
+    scene.tiles[y][x].item = monster.item
+  end
+end
+
 return monster_manager
