@@ -23,9 +23,13 @@ function combat_core.end_combat()
   tab_manager.active_tab = "inv."
   sfx_manager.stop_combat_music()
 
-  x, y = monster_manager.find_monster_position(combat_manager.monster.id)
-
-  scene.tiles[y][x].monster = nil
+  if player.hp > 0 and combat_manager.monster.hp == 0 then
+    x, y = monster_manager.find_monster_position(combat_manager.monster.id)
+    scene.tiles[y][x].monster = nil
+    sfx_manager.success()
+  elseif player.hp == 0 then
+    sfx_manager.player_death()
+  end
 end
 
 return combat_core

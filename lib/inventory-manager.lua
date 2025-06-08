@@ -10,7 +10,7 @@ function inventory_manager.collect_item(tile)
   item.location = "inventory"
   tile.item = nil
   log.add_message("You found a "..item.name.."!")
-
+  sfx_manager.pick_up()
   table.sort(items, function(a, b) return a.name < b.name end)
 end
 
