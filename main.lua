@@ -73,7 +73,6 @@ function love.draw()
   love.graphics.rectangle("fill", (scene.width)*32, (scene.height)*32, 1024, 768)
 
   scene_manager.draw_scene()
-  sfx_manager.play_scene_music()
 
   love.graphics.setColor(1, 1, 1, 1)
   love.graphics.draw(background, 0, 0)

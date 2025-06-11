@@ -62,7 +62,19 @@ function tab_manager.show_combat_tab()
 end
 
 function tab_manager.show_inventory_tab()
+  local left_click  = love.graphics.newImage('assets/left-click.png')
+  local right_click = love.graphics.newImage('assets/right-click.png')
+
   love.graphics.print("INVENTORY", font, 554, 66)
+  love.graphics.setFont(love.graphics.newFont(12))
+
+  love.graphics.draw(left_click, 765, 65)
+  love.graphics.print("Use Item", 785, 66)
+
+  love.graphics.draw(right_click, 865, 65)
+  love.graphics.print("Discard Item", 885, 66)
+
+  love.graphics.setFont(love.graphics.newFont(16))
   inventory_manager.render_inventory()
 end
 
