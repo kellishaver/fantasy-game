@@ -45,9 +45,13 @@ function love.wheelmoved(x, y)
 end
 
 function love.mousepressed(x, y, button)
-   if button == 1 then
-      tab_manager.click_tab(x, y)
-   end
+  if button == 1 then
+    tab_manager.click_tab(x, y)
+  end
+
+  if active_tab ~= "inv." then
+    inventory_manager.handle_inventory_click(x, y, button)
+  end
 end
 
 function love.update(dt)
